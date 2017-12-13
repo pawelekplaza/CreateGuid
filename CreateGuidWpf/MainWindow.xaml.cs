@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CreateGuidWpf
 {
@@ -20,17 +9,56 @@ namespace CreateGuidWpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool _withPauses = true;
+        private bool _uppercase = true;
+
         public MainWindow()
         {
             InitializeComponent();
-
-            GuidTextBlock.Text = Guid.NewGuid().ToString().ToUpper();
+            GenerateGuid();
         }
 
         private void CopyButton_Click(object sender, RoutedEventArgs e)
-        {                        
+        {
             Clipboard.SetText(GuidTextBlock.Text);
-            GuidTextBlock.Text = Guid.NewGuid().ToString().ToUpper();
+            GenerateGuid();
+        }
+
+        private void GenerateGuid()
+        {
+            GuidTextBlock.Text = Guid.NewGuid().ToString();
+
+            if (!_withPauses)
+                GuidTextBlock.Text = GuidTextBlock.Text.Replace("-", "");
+
+            if (_uppercase)
+                GuidTextBlock.Text = GuidTextBlock.Text.ToUpper();
+        }
+
+        private void withPausesCheckedChanged(object sender, RoutedEventArgs e)
+        {
+            var checkbox = sender as CheckBox;
+            if (checkbox == null)
+                return;
+
+            if (!checkbox.IsChecked.HasValue)
+                return;
+
+            _withPauses = checkbox.IsChecked.Value;
+            GenerateGuid();
+        }
+
+        private void uppercaseCheckedChanged(object sender, RoutedEventArgs e)
+        {
+            var checkbox = sender as CheckBox;
+            if (checkbox == null)
+                return;
+
+            if (!checkbox.IsChecked.HasValue)
+                return;
+
+            _uppercase = checkbox.IsChecked.Value;
+            GenerateGuid();
         }
     }
 }
