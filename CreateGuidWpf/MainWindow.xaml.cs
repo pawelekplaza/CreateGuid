@@ -37,28 +37,23 @@ namespace CreateGuidWpf
 
         private void withPausesCheckedChanged(object sender, RoutedEventArgs e)
         {
-            var checkbox = sender as CheckBox;
-            if (checkbox == null)
-                return;
-
-            if (!checkbox.IsChecked.HasValue)
-                return;
-
-            _withPauses = checkbox.IsChecked.Value;
+            _withPauses = GetCheckboxValue(sender);
             GenerateGuid();
         }
 
         private void uppercaseCheckedChanged(object sender, RoutedEventArgs e)
         {
+            _uppercase = GetCheckboxValue(sender);
+            GenerateGuid();
+        }
+
+        private bool GetCheckboxValue(object sender)
+        {
             var checkbox = sender as CheckBox;
             if (checkbox == null)
-                return;
+                return false;
 
-            if (!checkbox.IsChecked.HasValue)
-                return;
-
-            _uppercase = checkbox.IsChecked.Value;
-            GenerateGuid();
+            return checkbox.IsChecked ?? false;
         }
     }
 }
